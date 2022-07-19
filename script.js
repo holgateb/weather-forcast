@@ -1,55 +1,62 @@
-var API = "http://api.openweathermap.org/geo/1.0/direct?q=seattle&limit=5&appid=a33c8465f73ad3b21cf598e66cd98eb0"
+var API =
+  "http://api.openweathermap.org/geo/1.0/direct?q=seattle&limit=5&appid=a33c8465f73ad3b21cf598e66cd98eb0";
 
+var searchBtn = document.getElementById("search-form");
 //handle button clicks to fetch weather info
 
-    //fetch the city name from the text <input>
-
+function getCityName(event) {
+  event.preventDefault();
+  //fetch the city name from the text <input>
+  var cityName = document.getElementById("search-input");
+  fetchGeolocation(cityName.value);
+}
 //handle button clicks to fetch weather data
 
-    //get the city name from the clicked buttons (event.target) data-city attribute
+//get the city name from the clicked buttons (event.target) data-city attribute
 
-    //call the 'fetchgeolocation' and pass the city name
+//call the 'fetchgeolocation' and pass the city name
 
 //fetch geolocation data (geocoding API)
 
-function fetchGeolocation( cityName ) {
+function fetchGeolocation(city) {
+  var request = `http://api.openweathermap.org/geo/1.0/direct?q=${city}&appid=a33c8465f73ad3b21cf598e66cd98eb0`;
 
-    var request = `http://api.openweathermap.org/geo/1.0/direct?q=${cityName}&limit=5&appid=a33c8465f73ad3b21cf598e66cd98eb0`
-
-    fetch(request)
-        .then(function(response) {
-            return response.json();
-        })
-        .then(function(data) {
-            console.log(data);
-
-            //access lat and long from data
-
-            // Call fetchOneCallWeather and pass through the lat and lon
-        })
+  fetch(request)
+    .then(function (response) {
+      return response.json();
+    })
+    .then(function (data) {
+      //access lat and long from data
+      fetchOneCallWeather(data[0].lat, data[0].lon, data[0].name);
+      // Call fetchOneCallWeather and pass through the lat and lon
+    });
 }
-
-fetchGeolocation();
 
 //pass the geolocation to next function
 
 //fetch weather data (onecall API)
-function fetchOneCallWeather (lat, lon) {
+function fetchOneCallWeather(lat, lon, city) {
+  var request = `https://api.openweathermap.org/data/2.5/onecall?&lat=${lat}&lon=${lon}&units=imperial&exclude=hourly,minutely&appid=a33c8465f73ad3b21cf598e66cd98eb0`;
 
-    var lat = $("#lat-field").val();
-    var lon = $("#lon-field").val();
-
-    var request = "https://api.openweathermap.org/data/3.0/onecall?appid=a33c8465f73ad3b21cf598e66cd98eb0&lat=${lat}&lon=${lon}&units=imperial&exclude=hourly,minutely"
-    
-    fetch(request)
-    .then(function(response) {
-        return response.json();
+  fetch(request)
+    .then(function (response) {
+      return response.json();
     })
-    .then(function(data) {
-        console.log(data);
-
-        //Display the weather data
-    })
+    .then(function (data) {
+      console.log(data);
+      disaplyCurrentWeather(data.current, city);
+      //Display the weather data
+    });
 }
 
-fetchOneCallWeather();
+function disaplyCurrentWeather(currentWeather, cityName) {
+    console.log(currentWeather, cityName)
+
+    //work on this before displayFiveDay
+}
+
+function displayFiveDay(forcast) {
+
+}
+
+searchBtn.addEventListener("submit", getCityName);
