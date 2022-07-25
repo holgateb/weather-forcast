@@ -1,7 +1,8 @@
 var API =
-  "http://api.openweathermap.org/geo/1.0/direct?q=seattle&limit=5&appid=a33c8465f73ad3b21cf598e66cd98eb0";
+  "https://api.openweathermap.org/geo/1.0/direct?q=seattle&limit=5&appid=a33c8465f73ad3b21cf598e66cd98eb0";
+var searchBtn = document.getElementById("#search-button");
+var inputEl = document.getElementById("#search-input");
 
-var searchBtn = document.getElementById("search-form");
 //handle button clicks to fetch weather info
 
 function getCityName(event) {
@@ -10,16 +11,25 @@ function getCityName(event) {
   var cityName = document.getElementById("search-input");
   fetchGeolocation(cityName.value);
 }
+
 //handle button clicks to fetch weather data
+
+var buttonClickHandler = function (event) {
 
 //get the city name from the clicked buttons (event.target) data-city attribute
 
+var city = event.target.getAttribute('data-city');
+
 //call the 'fetchgeolocation' and pass the city name
+
+fetchGeolocation(city);
+
+};
 
 //fetch geolocation data (geocoding API)
 
 function fetchGeolocation(city) {
-  var request = `http://api.openweathermap.org/geo/1.0/direct?q=${city}&appid=a33c8465f73ad3b21cf598e66cd98eb0`;
+  var request = `https://api.openweathermap.org/geo/1.0/direct?q=${city}&appid=a33c8465f73ad3b21cf598e66cd98eb0`;
 
   fetch(request)
     .then(function (response) {
